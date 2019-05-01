@@ -15,6 +15,7 @@ public class UserInfo {
     private UserType type;
     @NotEmpty
     private String phone;
+    private String target;
 
     @Email
     private String email;
@@ -57,5 +58,13 @@ public class UserInfo {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 }

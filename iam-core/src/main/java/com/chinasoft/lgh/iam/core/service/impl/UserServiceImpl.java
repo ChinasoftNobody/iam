@@ -53,6 +53,9 @@ public class UserServiceImpl implements UserService {
         if (password.equals(Base64Utils.encodeToString(userParam.getPassword().getBytes(Constants.CHARSET)))) {
             user.setLogged(true);
             user.setLoginTime(System.currentTimeMillis());
+            if (!StringUtils.isEmpty(userParam.getTarget())) {
+                user.setLoginDomain(userParam.getTarget());
+            }
             return userRepo.save(user);
         } else {
             throw new IamException(ExceptionCode.LOGIN_FAILED);
@@ -69,22 +72,23 @@ public class UserServiceImpl implements UserService {
                 , userInfo.getEmail(), userInfo.getPhone(), userInfo.getType());
         mUser.setLogged(true);
         mUser.setLoginTime(System.currentTimeMillis());
+        mUser.setLoginDomain(".");
         return userRepo.save(mUser);
     }
 
     @Override
     public MUser updateBasicInfo(UserInfo userInfo) {
-        if (StringUtils.isEmpty(userInfo.getName())){
+        if (StringUtils.isEmpty(userInfo.getName())) {
             throw new IamException(ExceptionCode.USER_NOT_FOUND);
         }
         MUser user = userRepo.findByNameAndDeleted(userInfo.getName(), false);
-        if (user == null){
+        if (user == null) {
             throw new IamException(ExceptionCode.USER_NOT_FOUND);
         }
-        if (!StringUtils.isEmpty(userInfo.getEmail())){
+        if (!StringUtils.isEmpty(userInfo.getEmail())) {
             user.setEmail(userInfo.getEmail());
         }
-        if (!StringUtils.isEmpty(userInfo.getPhone())){
+        if (!StringUtils.isEmpty(userInfo.getPhone())) {
             user.setPhone(userInfo.getPhone());
         }
         return userRepo.save(user);

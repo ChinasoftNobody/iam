@@ -47,13 +47,21 @@
         methods: {
             onSubmit: function (evt) {
                 evt.preventDefault();
-                const url = this.$route.query.target;
-                this.$http.post('http://localhost:8080/iam/public/user/login', this.userInfo, {
+                let url = this.$route.query.target;
+                this.$http.post('http://localhost:8080/iam/public/user/login', {
+                    name: this.userInfo.name,
+                    password: this.userInfo.password,
+                    target: url
+                }, {
                     headers: {
                         "IAM-TOKEN": ""
                     }
                 }).then(function (data) {
                     if (data.body.success) {
+                        debugger;
+                        if (!url) {
+                            url = data.body.result.loginDomain;
+                        }
                         window.location = url;
                     } else {
                         this.message = data.body.error;
