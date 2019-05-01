@@ -58,7 +58,6 @@
                     }
                 }).then(function (data) {
                     if (data.body.success) {
-                        debugger;
                         if (!url) {
                             url = data.body.result.loginDomain;
                         }
