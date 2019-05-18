@@ -6,14 +6,17 @@ import VueResource from 'vue-resource'
 import {Router} from "./router";
 import {registerComponents} from "./components";
 import App from "./App";
+import VueCookies from 'vue-cookies';
 import VueRouter from "vue-router";
 
 Vue.config.productionTip = false;
+
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(VueResource);
+Vue.use(VueCookies);
 registerComponents();
 new Vue({
-    router: Router,
-    render: h => h(App)
+    render: h => h(App),
+    router: Router
 }).$mount('#app');

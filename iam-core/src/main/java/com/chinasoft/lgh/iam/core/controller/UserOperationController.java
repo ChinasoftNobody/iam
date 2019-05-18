@@ -25,7 +25,7 @@ public class UserOperationController {
         MUser user = userService.updateBasicInfo(userInfo);
         return Response.success(user);
     }
-    @GetMapping("/userList")
+    @PostMapping("/userList")
     public Response<Page<MUser>> getUserList(@RequestBody IamPageRequest request){
         return Response.success(userService.getUserList(request));
     }

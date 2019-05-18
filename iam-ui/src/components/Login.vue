@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <app-title-header></app-title-header>
         <b-alert v-if="showError" variant="warning" show>{{message}}</b-alert>
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-form-group
@@ -23,11 +24,15 @@
             </b-form-group>
 
             <b-button type="submit" variant="primary">登录</b-button>
+            <router-link to="register">注册</router-link>
         </b-form>
     </div>
 </template>
 
 <script>
+
+    import TokenService from "../service/TokenService";
+    import Urls from "../config/Urls";
 
     export default {
         name: 'Login',
@@ -48,22 +53,25 @@
             onSubmit: function (evt) {
                 evt.preventDefault();
                 let url = this.$route.query.target;
-                this.$http.post('http://localhost:8080/iam/public/user/login', {
+                this.$http.post(Urls.urls.loginUrl, {
                     name: this.userInfo.name,
                     password: this.userInfo.password,
                     target: url
                 }, {
                     headers: {
-                        "IAM-TOKEN": ""
+                        "IAM-TOKEN": TokenService.getToken()
                     }
-                }).then(function (data) {
-                    if (data.body.success) {
+                }).then(function (response) {
+                    if (response.body.success) {
+                        let token = response.headers.get('iam-token');
+                        TokenService.setToken(token);
                         if (!url) {
-                            url = data.body.result.loginDomain;
+                            this.$router.push('/');
+                        } else {
+                            window.location = url;
                         }
-                        window.location = url;
                     } else {
-                        this.message = data.body.error;
+                        this.message = response.body.error;
                         this.showError = true;
                     }
                 });

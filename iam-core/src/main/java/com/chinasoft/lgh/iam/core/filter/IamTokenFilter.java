@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Configuration
@@ -63,10 +64,14 @@ public class IamTokenFilter implements Filter {
     }
 
     private void failed(ServletResponse servletResponse) throws IOException {
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         Response response = Response.error("token 校验失败");
-        servletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        servletResponse.getWriter().write(JSON.toJSONString(response));
-        servletResponse.getWriter().flush();
+        httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.addHeader("Access-Control-Allow-Headers", "*");
+        httpServletResponse.addHeader("Access-Control-Allow-Methods", "*");
+        httpServletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        httpServletResponse.getWriter().write(JSON.toJSONString(response));
+        httpServletResponse.getWriter().flush();
     }
 
     @Override

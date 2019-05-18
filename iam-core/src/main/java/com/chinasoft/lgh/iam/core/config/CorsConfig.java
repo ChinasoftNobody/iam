@@ -10,9 +10,10 @@ import org.springframework.web.filter.CorsFilter;
 public class CorsConfig {
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addExposedHeader(Constants.IAM_TOKEN_HEADER);
         corsConfiguration.addAllowedOrigin("*"); //允许任何域名
         corsConfiguration.addAllowedHeader("*"); //允许任何头
-        corsConfiguration.addAllowedMethod("*"); //允许任何方法
+        corsConfiguration.addAllowedMethod("*");//允许任何方法
         return corsConfiguration;
     }
 

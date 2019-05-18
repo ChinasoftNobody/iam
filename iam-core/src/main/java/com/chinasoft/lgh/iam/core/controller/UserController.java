@@ -27,8 +27,8 @@ public class UserController {
         MUser mUser = userService.validateToken(tokenHeader);
         if (mUser == null) {
             mUser = userService.login(user);
-            response.setHeader(Constants.IAM_TOKEN_HEADER, Base64Utils.encodeToString(JSON.toJSONString(mUser).getBytes(Constants.CHARSET)));
         }
+        response.addHeader(Constants.IAM_TOKEN_HEADER, Base64Utils.encodeToString(JSON.toJSONString(mUser).getBytes(Constants.CHARSET)));
         return Response.success(mUser);
     }
 
