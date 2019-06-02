@@ -1,7 +1,6 @@
-<mat-toolbar>
-  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item>Item 1</button>
-    <button mat-menu-item>Item 2</button>
-  </mat-menu>
+<mat-toolbar color="primary">
+  <button mat-button (click)="goHome()">统一身份认证中心</button>
+  <button mat-button>成员</button>
+  <button mat-button>服务</button>
+  <button mat-button>权限</button>
 </mat-toolbar>
