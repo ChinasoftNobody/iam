@@ -16,6 +16,7 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -97,5 +98,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<MUser> getUserList(IamPageRequest request) {
         return userRepo.findAllByDeleted(false, PageRequest.of(request.getPage(), request.getSize()));
+    }
+
+    @Override
+    public void logout(MUser user) {
+        if (user == null) {
+            return;
+        }
+        Optional<MUser> userOptional = userRepo.findById(user.getId());
+        if (userOptional.isEmpty()){
+            return;
+        }
+        MUser mUser = userOptional.get();
+        if (mUser.isLogged()){
+            mUser.setLogged(false);
+            mUser.setLocked(false);
+            userRepo.save(mUser);
+        }
     }
 }

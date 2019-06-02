@@ -3,7 +3,7 @@
         <!-- 导航头 -->
         <div>
             <b-navbar toggleable="lg" type="dark" variant="dark">
-                <b-navbar-brand href="#">IAM</b-navbar-brand>
+                <b-navbar-brand href="#" v-on:click="$router.push('/')">IAM</b-navbar-brand>
 
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -31,27 +31,45 @@
                             <!-- Using 'button-content' slot -->
                             <template slot="button-content"><em>个人中心</em></template>
                             <b-dropdown-item href="#">我的信息</b-dropdown-item>
-                            <b-dropdown-item href="#">退出登录</b-dropdown-item>
+                            <b-dropdown-item href="#" v-on:click="logout()">退出登录</b-dropdown-item>
                         </b-nav-item-dropdown>
                     </b-navbar-nav>
                 </b-collapse>
             </b-navbar>
         </div>
+        <error-info :message="getMessage()" :show-message="getShow()"></error-info>
         <router-view></router-view>
     </div>
 </template>
 
 <script>
 
+    import Urls from "./config/Urls";
+    import TokenService from "./service/TokenService";
+    import {ErrorService} from "./service/ErrorService";
+    import ErrorInfo from "./components/ErrorInfo";
+
     export default {
         name: 'app',
-        components: {},
+        components: {ErrorInfo},
         data: function () {
-            return {}
+            return {
+            }
         },
         methods: {
-            goManagement:function () {
+            goManagement: function () {
                 this.$router.push("/management");
+            },
+            logout: function () {
+                this.$http.post(Urls.urls.logoutUrl, {}, {headers: {'IAM-TOKEN': TokenService.getToken()}}).then(function (data) {
+                    ErrorService.showErrorMessage('asd');
+                })
+            },
+            getMessage: function () {
+                return ErrorService.message;
+            },
+            getShow: function () {
+                return ErrorService.show;
             }
         }
 

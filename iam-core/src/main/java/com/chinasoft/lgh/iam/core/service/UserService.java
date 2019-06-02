@@ -16,4 +16,6 @@ public interface UserService {
     MUser updateBasicInfo(UserInfo userInfo);
 
     Page<MUser> getUserList(IamPageRequest request);
+
+    void logout(MUser user);
 }

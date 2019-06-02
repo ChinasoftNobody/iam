@@ -6,9 +6,13 @@ import com.chinasoft.lgh.iam.core.pojo.Response;
 import com.chinasoft.lgh.iam.core.pojo.user.IamPageRequest;
 import com.chinasoft.lgh.iam.core.pojo.user.UserInfo;
 import com.chinasoft.lgh.iam.core.service.UserService;
+import com.chinasoft.lgh.iam.core.util.TokenStore;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -28,5 +32,12 @@ public class UserOperationController {
     @PostMapping("/userList")
     public Response<Page<MUser>> getUserList(@RequestBody IamPageRequest request){
         return Response.success(userService.getUserList(request));
+    }
+
+    @PostMapping("/logout")
+    public Response<String> logout(){
+        MUser user = TokenStore.currentUser.get();
+        userService.logout(user);
+        return Response.success("ok");
     }
 }
