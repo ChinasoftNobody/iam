@@ -20,6 +20,7 @@ import {RegisterComponent} from './register/register.component';
 import {HomeComponent} from './home/home.component';
 import {LoginInterceptor} from './services/login-interceptor.service';
 import {TokenService} from './services/token.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {TokenService} from './services/token.service';
     FormsModule,
     MatIconModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    HttpClientModule
   ],
   exports: [
     MatButtonModule, MatCheckboxModule

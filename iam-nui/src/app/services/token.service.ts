@@ -7,4 +7,8 @@ export class TokenService {
     // TODO 默认认为已登录，这里后续做校验
     return false;
   }
+
+  getToken(): string {
+    return '';
+  }
 }
