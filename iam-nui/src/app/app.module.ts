@@ -5,6 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
+  MatBottomSheet, MatBottomSheetModule,
   MatButtonModule, MatCardModule,
   MatCheckboxModule,
   MatIconModule,
@@ -21,10 +22,13 @@ import {HomeComponent} from './home/home.component';
 import {LoginInterceptor} from './services/login-interceptor.service';
 import {TokenService} from './services/token.service';
 import {HttpClientModule} from '@angular/common/http';
+import {HttpService} from './services/http.service';
+import {ErrorService} from './services/error.service';
+import {BottomSheetErrorComponent} from './common/common-error.component';
 
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, HeaderComponent, RegisterComponent, HomeComponent
+    AppComponent, LoginComponent, HeaderComponent, RegisterComponent, HomeComponent, BottomSheetErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -40,12 +44,14 @@ import {HttpClientModule} from '@angular/common/http';
     MatIconModule,
     MatSelectModule,
     MatCardModule,
+    MatBottomSheetModule,
     HttpClientModule
   ],
   exports: [
     MatButtonModule, MatCheckboxModule
   ],
-  providers: [LoginInterceptor, TokenService],
+  entryComponents: [BottomSheetErrorComponent],
+  providers: [LoginInterceptor, TokenService, HttpService, ErrorService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

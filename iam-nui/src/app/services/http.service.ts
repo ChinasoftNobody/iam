@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {TokenService} from './token.service';
+import {ResponseModel} from '../model/response.model';
+import {ErrorService} from './error.service';
 
 export class Urls {
   domain: string;
@@ -11,30 +13,50 @@ export class Urls {
   }
 }
 
-export class IamUrls extends Urls {
-  static domain = 'http://localhost:8081';
-  static loginUrl: UrlConfig = {url: '/public/user/login'};
-
-}
-
 export class UrlConfig {
+  constructor(url: string) {
+    this.url = url;
+    this.method = 'post';
+  }
+
   url: string;
   method ? = 'post';
+}
+
+export class IamUrls extends Urls {
+  static domain = 'http://localhost:8080/iam';
+  static loginUrl: UrlConfig = new UrlConfig('/public/user/login');
+
 }
 
 
 @Injectable()
 export class HttpService {
-  constructor(private http: HttpClient, private tokenService: TokenService) {
+  constructor(private http: HttpClient, private tokenService: TokenService, private error: ErrorService) {
   }
 
-  request<R>(urlConfig: UrlConfig, body: any): Observable<R> {
+  /**
+   * post 请求返回以json格式封装对象
+   * @param urlConfig urlConfig
+   * @param requestBody requestBody
+   */
+  request<T>(urlConfig: UrlConfig, requestBody: any): BehaviorSubject<T> {
     const url = IamUrls.domain + urlConfig.url;
-    return this.http.request<R>(urlConfig.method, url, {
-      body: {body},
+    const resultSubject = new BehaviorSubject<T>(null);
+    this.http.request<ResponseModel<T>>(urlConfig.method, url, {
+      body: requestBody,
       headers: {
         'IAM-TOKEN': this.tokenService.getToken()
       }
+    }).subscribe(res => {
+      if (res && res.success) {
+        resultSubject.next(res.result);
+      } else {
+        this.error.newBusinessError(res.error);
+      }
+    }, error1 => {
+      this.error.newSystemError(error1);
     });
+    return resultSubject;
   }
 }
