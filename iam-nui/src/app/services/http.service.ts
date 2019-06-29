@@ -45,14 +45,20 @@ export class HttpService {
     const resultSubject = new BehaviorSubject<T>(null);
     this.http.request<ResponseModel<T>>(urlConfig.method, url, {
       body: requestBody,
+      observe: 'response',
       headers: {
         'IAM-TOKEN': this.tokenService.getToken()
       }
-    }).subscribe(res => {
-      if (res && res.success) {
-        resultSubject.next(res.result);
+    }).
+    subscribe(res => {
+      const iamToken = res.headers.get(TokenService.tokenKey);
+      if (iamToken) {
+        this.tokenService.setToken(iamToken);
+      }
+      if (res && res.body && res.body.success) {
+        resultSubject.next(res.body.result);
       } else {
-        this.error.newBusinessError(res.error);
+        this.error.newBusinessError(res.body.error);
       }
     }, error1 => {
       this.error.newSystemError(error1);

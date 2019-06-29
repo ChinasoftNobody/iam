@@ -25,6 +25,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {HttpService} from './services/http.service';
 import {ErrorService} from './services/error.service';
 import {BottomSheetErrorComponent} from './common/common-error.component';
+import {CookieService} from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ import {BottomSheetErrorComponent} from './common/common-error.component';
     MatButtonModule, MatCheckboxModule
   ],
   entryComponents: [BottomSheetErrorComponent],
-  providers: [LoginInterceptor, TokenService, HttpService, ErrorService],
+  providers: [LoginInterceptor, TokenService, HttpService, ErrorService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
