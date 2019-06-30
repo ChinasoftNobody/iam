@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {TokenService} from './token.service';
 import {ResponseModel} from '../model/response.model';
@@ -26,7 +26,7 @@ export class UrlConfig {
 export class IamUrls extends Urls {
   static domain = 'http://localhost:8080/iam';
   static loginUrl: UrlConfig = new UrlConfig('/public/user/login');
-
+  static logoutUrl: UrlConfig = new UrlConfig('/user/logout');
 }
 
 
@@ -40,17 +40,16 @@ export class HttpService {
    * @param urlConfig urlConfig
    * @param requestBody requestBody
    */
-  request<T>(urlConfig: UrlConfig, requestBody: any): BehaviorSubject<T> {
+  request<T>(urlConfig: UrlConfig, requestBody: any): Observable<T> {
     const url = IamUrls.domain + urlConfig.url;
-    const resultSubject = new BehaviorSubject<T>(null);
+    const resultSubject: Subject<T> = new Subject();
     this.http.request<ResponseModel<T>>(urlConfig.method, url, {
       body: requestBody,
       observe: 'response',
       headers: {
         'IAM-TOKEN': this.tokenService.getToken()
       }
-    }).
-    subscribe(res => {
+    }).subscribe(res => {
       const iamToken = res.headers.get(TokenService.tokenKey);
       if (iamToken) {
         this.tokenService.setToken(iamToken);

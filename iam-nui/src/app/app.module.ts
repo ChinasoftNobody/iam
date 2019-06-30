@@ -26,10 +26,15 @@ import {HttpService} from './services/http.service';
 import {ErrorService} from './services/error.service';
 import {BottomSheetErrorComponent} from './common/common-error.component';
 import {CookieService} from 'ngx-cookie-service';
+import {AuthorityComponent} from './biz/authority/authority.component';
+import {MemberComponent} from './biz/member/member.component';
+import {ServiceComponent} from './biz/service/service.component';
+import {LoginService} from './services/login.service';
 
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, HeaderComponent, RegisterComponent, HomeComponent, BottomSheetErrorComponent
+    AppComponent, LoginComponent, HeaderComponent, RegisterComponent, HomeComponent, BottomSheetErrorComponent, AuthorityComponent,
+    MemberComponent, ServiceComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +57,7 @@ import {CookieService} from 'ngx-cookie-service';
     MatButtonModule, MatCheckboxModule
   ],
   entryComponents: [BottomSheetErrorComponent],
-  providers: [LoginInterceptor, TokenService, HttpService, ErrorService, CookieService],
+  providers: [LoginInterceptor, TokenService, HttpService, ErrorService, CookieService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

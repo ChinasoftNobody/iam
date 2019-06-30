@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CookieService} from 'ngx-cookie-service';
+import {UserModel} from '../model/user.model';
 
 @Injectable()
 export class TokenService {
@@ -19,4 +20,20 @@ export class TokenService {
   setToken(tokenStr: string): void {
     this.cookie.set(TokenService.tokenKey, tokenStr, 1);
   }
+
+  clearToken() {
+    this.cookie.delete(TokenService.tokenKey);
+  }
+
+  saveUserInfo(user: UserModel) {
+    this.cookie.set('userInfo', JSON.stringify(user), 1);
+  }
+
+  getUserInfo(): UserModel {
+    const userInfo = this.cookie.get('userInfo');
+    if (userInfo) {
+      return JSON.parse(userInfo);
+    }
+  }
+
 }

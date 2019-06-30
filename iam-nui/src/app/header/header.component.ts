@@ -1,18 +1,30 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {LoginService} from '../services/login.service';
+import {UserModel} from '../model/user.model';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
+  userInfo: UserModel;
   constructor(
     private route: Router,
+    private loginService: LoginService
   ) {
   }
 
-  goHome() {
-    this.route.navigate(['home']);
+  go(url: string) {
+    this.route.navigate([url]).then();
+  }
+
+  logout() {
+    this.loginService.logout();
+  }
+
+  ngOnInit(): void {
+    this.userInfo = this.loginService.getUserInfo();
   }
 }
