@@ -27,6 +27,7 @@ export class IamUrls extends Urls {
   static domain = 'http://localhost:8080/iam';
   static loginUrl: UrlConfig = new UrlConfig('/public/user/login');
   static logoutUrl: UrlConfig = new UrlConfig('/user/logout');
+  static userListUrl: UrlConfig = new UrlConfig('/user/list');
 }
 
 

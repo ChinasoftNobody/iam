@@ -5,12 +5,11 @@ import com.chinasoft.lgh.iam.core.config.Constants;
 import com.chinasoft.lgh.iam.core.exception.ExceptionCode;
 import com.chinasoft.lgh.iam.core.exception.IamException;
 import com.chinasoft.lgh.iam.core.model.MUser;
-import com.chinasoft.lgh.iam.core.pojo.user.IamPageRequest;
 import com.chinasoft.lgh.iam.core.pojo.user.UserInfo;
+import com.chinasoft.lgh.iam.core.pojo.user.UserPageRequest;
 import com.chinasoft.lgh.iam.core.repo.UserRepo;
 import com.chinasoft.lgh.iam.core.service.UserService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
@@ -96,24 +95,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<MUser> getUserList(IamPageRequest request) {
-        return userRepo.findAllByDeleted(false, PageRequest.of(request.getPage(), request.getSize()));
-    }
-
-    @Override
     public void logout(MUser user) {
         if (user == null) {
             return;
         }
         Optional<MUser> userOptional = userRepo.findById(user.getId());
-        if (userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             return;
         }
         MUser mUser = userOptional.get();
-        if (mUser.isLogged()){
+        if (mUser.isLogged()) {
             mUser.setLogged(false);
             mUser.setLocked(false);
             userRepo.save(mUser);
         }
+    }
+
+    @Override
+    public Page<MUser> queryUserList(UserPageRequest request) {
+        MUser user = new MUser();
+        user.setName(request.getKeyword());
+        user.setPhone(request.getKeyword());
+        user.setEmail(request.getKeyword());
+        Page<MUser> userPage = userRepo.findAllByDeleted(false, Example.of(user, ExampleMatcher.matchingAny()
+                        .withMatcher("name", ExampleMatcher.GenericPropertyMatcher.of(ExampleMatcher.StringMatcher.CONTAINING))
+                        .withMatcher("email", ExampleMatcher.GenericPropertyMatcher.of(ExampleMatcher.StringMatcher.CONTAINING))
+                        .withMatcher("phone", ExampleMatcher.GenericPropertyMatcher.of(ExampleMatcher.StringMatcher.CONTAINING))),
+                PageRequest.of(request.getNumber(), request.getSize(), Sort.by(Sort.Direction.ASC, "name")));
+        return userPage;
     }
 }

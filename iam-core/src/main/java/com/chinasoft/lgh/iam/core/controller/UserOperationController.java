@@ -3,8 +3,8 @@ package com.chinasoft.lgh.iam.core.controller;
 import com.chinasoft.lgh.iam.core.config.Constants;
 import com.chinasoft.lgh.iam.core.model.MUser;
 import com.chinasoft.lgh.iam.core.pojo.Response;
-import com.chinasoft.lgh.iam.core.pojo.user.IamPageRequest;
 import com.chinasoft.lgh.iam.core.pojo.user.UserInfo;
+import com.chinasoft.lgh.iam.core.pojo.user.UserPageRequest;
 import com.chinasoft.lgh.iam.core.service.UserService;
 import com.chinasoft.lgh.iam.core.util.TokenStore;
 import org.springframework.data.domain.Page;
@@ -29,13 +29,14 @@ public class UserOperationController {
         MUser user = userService.updateBasicInfo(userInfo);
         return Response.success(user);
     }
-    @PostMapping("/userList")
-    public Response<Page<MUser>> getUserList(@RequestBody IamPageRequest request){
-        return Response.success(userService.getUserList(request));
+
+    @PostMapping("/list")
+    public Response<Page<MUser>> getUserList(@RequestBody UserPageRequest request) {
+        return Response.success(userService.queryUserList(request));
     }
 
     @PostMapping("/logout")
-    public Response<String> logout(){
+    public Response<String> logout() {
         MUser user = TokenStore.currentUser.get();
         userService.logout(user);
         return Response.success("ok");

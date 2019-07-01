@@ -7,11 +7,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatBottomSheet, MatBottomSheetModule,
   MatButtonModule, MatCardModule,
-  MatCheckboxModule,
+  MatCheckboxModule, MatGridListModule,
   MatIconModule,
   MatInputModule,
-  MatMenuModule,
-  MatSelectModule,
+  MatMenuModule, MatPaginatorModule, MatProgressSpinnerModule,
+  MatSelectModule, MatSidenavModule, MatSortModule, MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 import {LoginComponent} from './login/login.component';
@@ -51,7 +51,13 @@ import {LoginService} from './services/login.service';
     MatSelectModule,
     MatCardModule,
     MatBottomSheetModule,
-    HttpClientModule
+    HttpClientModule,
+    MatGridListModule,
+    MatSidenavModule,
+    MatProgressSpinnerModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatTableModule
   ],
   exports: [
     MatButtonModule, MatCheckboxModule
